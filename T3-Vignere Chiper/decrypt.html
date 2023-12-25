@@ -1,0 +1,65 @@
+<!DOCTYPE html> <!-- Deklarasi tipe dokumen HTML -->
+<html>
+<head>
+    <title>Vigenere Cipher Decryption</title> <!-- Membuat j udul halaman web yang akan ditampilkan di tab browser -->
+</head>
+<body>
+    <h1>Vigenere Cipher Decryption</h1> <!-- Membuat Judul utama halaman web -->
+    <form id="decryptionForm"> <!-- Membuat Form untuk mengumpulkan input dari pengguna -->
+        <label for="ciphertext">Ciphertext:</label> <!-- Membuat Label untuk input teks sanditext -->
+        <input type="text" id="ciphertext" name="ciphertext" required><br><br> <!-- Membuat Input teks sanditext yang diperlukan -->
+
+        <label for="keyword">Keyword:</label> <!--Membuat Label untuk input kata kunci (keyword) -->
+        <input type="text" id="keyword" name="keyword" required><br><br> <!--Membuat Input kata kunci yang diperlukan -->
+
+        <input type="button" value="Decrypt" onclick="decrypt()"> <!-- Membuat button/Tombol "Decrypt" yang akan memanggil fungsi JavaScript "decrypt()" saat diklik -->
+    </form>
+
+    <h2>Hasil Dekripsi:</h2> <!--Membuat Judul untuk hasil dekripsi yang akan ditampilkan -->
+    <h2 style="color: blueviolet;" id="decryptedText"></h2> <!-- Membuat elemen untuk menampilkan teks hasil dekripsi dengan warna teks blue -->
+
+    <!-- Menambahkan link  "Kembali ke Halaman Utama" yang akan mengarahkan pengguna ke halaman "index.html" -->
+    <a href="index.html">Kembali ke Halaman Utama</a>
+
+    <script> // membuat script javascript dalam tag script
+        // Mendefinisikan function untuk melakukan dekripsi Vigenere dengan parameter chipertext dan keyword
+        function vigenere_decrypt(ciphertext, keyword) {
+            // Definisikan alfabet yang akan digunakan dalam dekripsi
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; //Mendefinisikan alfabet yang akan digunakan dalam dekripsi
+            let decrypted_text = ''; // // mendekalarasikan string kosong untuk menyimpan teks yang telah terdekripsi
+
+            // Membuat loop for melalui setiap karakter dalam ciphertext
+            for (let i = 0; i < ciphertext.length; i++) { //deklarasi nilai awal i dengan 0, selama i kurang dari panjang chipertext maka menjalaankan kondisi berikut
+                if (ciphertext[i] === ' ') {
+                    decrypted_text += ' '; // Jika karakter adalah spasi, tambahkan spasi ke hasil dekripsi
+                    continue;
+                }
+
+                // Menemukan indeks karakter dalam alfabet untuk ciphertext dan kata kunci
+                const ciphertext_char_index = alphabet.indexOf(ciphertext[i]); // Mencari indeks karakter dalam alfabet untuk karakter ciphertext saat ini yang disimpan di variabel ciphertext_char_index
+                const keyword_char_index = alphabet.indexOf(keyword[i % keyword.length]); // Mencari indeks karakter dalam alfabet untuk karakter kata kunci (keyword) yang sesuai dengan posisi saat ini yang disimpan di variabel keyword_char_index
+
+                // Hitung indeks karakter terdekripsi
+                const decrypted_char_index = (ciphertext_char_index - keyword_char_index + 26) % 26; // Menghitung indeks karakter terdekripsi dengan menjumlahkan indeks karakter plainteks dan kata kunci, kemudian mengambil modulus 26 agar tetap berada dalam rentang alfabet
+                decrypted_text += alphabet[decrypted_char_index]; // Tambahkan karakter terdekripsi ke hasil dekripsi
+            }
+
+            return decrypted_text; // Kembalikan teks terdekripsi menggunakan assignment operator
+        }
+
+        // Function ini akan dipanggil saat tombol "Decrypt" diklik
+        function decrypt() {
+            const ciphertextInput = document.getElementById("ciphertext").value; // Menyimpan nilai teks ciphertex dari input user pada variabelciphertextInput
+            const keywordInput = document.getElementById("keyword").value; // Menyimpan nilai keyword dari input user pada variabel keywordInput
+
+            // Hilangkan spasi dan ubah teks menjadi huruf besar
+            const ciphertextWithoutSpace = ciphertextInput.replace(/ /g, "").toUpperCase(); // Menghilangkan spasi dari teks chipertext dan mengonversi semua karakter ke huruf besar dan menyimpan di variabel chipertextWithoutSpace
+            const keywordUpper = keywordInput.toUpperCase(); // Mengonversi kata kunci (keyword) menjadi huruf besar
+
+            // Panggil function dekripsi Vigenere dan tampilkan hasilnya
+            const decryptedText = vigenere_decrypt(ciphertextWithoutSpace, keywordUpper); // Memanggil function dekripsi Vigenere dengan teks chiperteks yang telah dihapus spasi dan kata kunci dalam huruf besar
+            document.getElementById("decryptedText").innerText = decryptedText;  // Menampilkan teks hasil dekripsi di elemen dengan ID "decryptedText" pada halaman HTML
+        }
+    </script>
+</body>
+</html>

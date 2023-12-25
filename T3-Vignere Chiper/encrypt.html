@@ -1,0 +1,65 @@
+<!DOCTYPE html> <!-- Deklarasi tipe dokumen HTML -->
+<html>
+<head>
+    <title>Vigenere Cipher Encryption</title> <!-- Membuat Judul halaman web yang akan ditampilkan di tab browser -->
+</head>
+<body>
+    <h1>Vigenere Cipher Encryption</h1> <!--Membuat Judul utama halaman web -->
+    <form id="encryptionForm"> <!-- Membuat form untuk mengumpulkan input dari pengguna -->
+        <label for="plaintext">Plaintext:</label> <!-- Membuat label untuk input plainteks -->
+        <input type="text" id="plaintext" name="plaintext" required><br><br> <!-- membuat Input dengan tipe teks untuk plainteks yang diperlukan -->
+
+        <label for="keyword">Keyword:</label> <!-- Membuat label untuk input kata kunci (keyword) -->
+        <input type="text" id="keyword" name="keyword" required><br><br> <!-- membuat Input dengan tipe teks untuk Input keyword -->
+
+        <input type="button" value="Encrypt" onclick="encrypt()"> <!-- Membuat buttpon/tombol "Encrypt" yang akan memanggil function JavaScript "encrypt()" saat diklik -->
+    </form>
+
+    <h2>Hasil Enkripsi:</h2> <!-- Membuat Judul untuk hasil enkripsi yang akan ditampilkan -->
+    <h2 style="color: blueviolet;" id="encryptedText"></h2> <!-- Membuat elemen untuk menampilkan teks hasil enkripsi dengan warna teks yang blueviolet -->
+
+    <!-- Menambahkan link  "Kembali ke Halaman Utama" yang akan mengarahkan pengguna ke halaman "index.html" -->
+    <a href="index.html">Kembali ke Halaman Utama</a>
+
+    <script> // membuat script javascript dalam tag script
+        // Mendefinisikan function untuk melakukan enkripsi Vigenere dengan parameter plainteks dan keyword
+        function vigenere_encrypt(plaintext, keyword) { 
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Mendefinisikan alfabet yang akan digunakan dalam enkripsi
+            let encrypted_text = ''; // mendekalarasikan string kosong untuk menyimpan teks yang telah terenkripsi
+
+            // Membuat loop for melalui setiap karakter dalam plaintext
+            for (let i = 0; i < plaintext.length; i++) { // deklarasi nilai awal i dengan 0, selama i kurang dari panjang plantiext maka menjalaankan kondisi berikut
+                if (plaintext[i] === ' ') { 
+                    encrypted_text += ' '; // Jika karakter adalah spasi, tambahkan spasi ke hasil enkripsi
+                    continue;
+                }
+
+                // Menemukan indeks karakter dalam alfabet untuk plainteks dan keyword
+                const plaintext_char_index = alphabet.indexOf(plaintext[i]); // Mencari indeks karakter dalam alfabet untuk karakter plainteks saat ini yang disimpan di variabel plaintext_char_index
+                const keyword_char_index = alphabet.indexOf(keyword[i % keyword.length]); // Mencari indeks karakter dalam alfabet untuk karakter kata kunci (keyword) yang sesuai dengan posisi saat ini yang disimpan di variabel keyword_char_index
+
+
+                // Hitung indeks karakter terenkripsi
+                const encrypted_char_index = (plaintext_char_index + keyword_char_index) % 26; // Menghitung indeks karakter terenkripsi dengan menjumlahkan indeks karakter plainteks dan kata kunci, kemudian mengambil modulus 26 agar tetap berada dalam rentang alfabet
+                encrypted_text += alphabet[encrypted_char_index]; // Tambahkan karakter terenkripsi ke hasil enkripsi menggunakan assignment operator
+            }
+
+            return encrypted_text; // Mengembalikan nilai teks terenkripsi agar bisa dipanggil
+        }
+
+        // Function ini akan dipanggil saat tombol "Encrypt" diklik
+        function encrypt() {
+            const plaintextInput = document.getElementById("plaintext").value; // Menyimpan nilai teks plainteks dari input user pada variabel plaintextInput
+            const keywordInput = document.getElementById("keyword").value; // Menyimpan nilai keyword dari input user pada variabel keywordInpu
+
+            // Hilangkan spasi dan ubah teks menjadi huruf besar
+            const plaintextWithoutSpace = plaintextInput.replace(/ /g, "").toUpperCase(); // Menghilangkan spasi dari teks plainteks dan mengonversi semua karakter ke huruf besar dan menyimpan di variabel plaintextWithoutSpace
+            const keywordUpper = keywordInput.toUpperCase(); // Mengonversi kata kunci (keyword) menjadi huruf besar
+
+            // Panggil fungsi enkripsi Vigenere dan tampilkan hasilnya
+            const encryptedText = vigenere_encrypt(plaintextWithoutSpace, keywordUpper);  // Memanggil function enkripsi Vigenere dengan teks plainteks yang telah dihapus spasi dan kata kunci dalam huruf besar
+            document.getElementById("encryptedText").innerText = encryptedText; // Menampilkan teks hasil dekripsi di elemen dengan ID "encryptedText" pada halaman HTML
+        }
+    </script>
+</body>
+</html>
